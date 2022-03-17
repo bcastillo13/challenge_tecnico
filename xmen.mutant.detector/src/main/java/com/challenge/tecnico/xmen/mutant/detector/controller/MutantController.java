@@ -1,7 +1,7 @@
 package com.challenge.tecnico.xmen.mutant.detector.controller;
 
 import com.challenge.tecnico.xmen.mutant.detector.dto.Message;
-import com.challenge.tecnico.xmen.mutant.detector.exception.AdnSecuenceException;
+import com.challenge.tecnico.xmen.mutant.detector.exception.AdnSequenceException;
 import com.challenge.tecnico.xmen.mutant.detector.service.MutantService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -25,17 +25,18 @@ public class MutantController {
      */
     @PostMapping("")
     public ResponseEntity<?> isMutant(@RequestBody String[] adn) {
-
+        ResponseEntity responseEntity;
         try {
-            int equalSecuences = 0;
+            int equalSequences = 0;
             String[][] matrix = mutantService.getMatrixAdn(adn);
 
-            equalSecuences = mutantService.findSecuenceHorizontal(matrix, 0, 0, ",", 1);
-            //TODO integrar busqueda de secuencias verticales (ya está en el standalone)
+            //Búsqueda horizontak
+            equalSequences = mutantService.findSequenceHorizontal(matrix, 0, 0, ",", 1, 0);
+
+            //Búsqueda vertical
+            equalSequences = mutantService.findSequenceVertical(matrix, 0, 0, ",", 1, 0) + equalSequences;
+
             //TODO integrar busqueda de secuencias oblicuas (en desarrollo en stand alone)
-            //TODO guardar registros en BBDD
-            //TODO integrar unitTest
-            //TODO integrar logs
 
             //TODO Borrar esto, solo es un ejemplo para mostrar la matriz ingresada
             for (int i = 0; i < matrix.length; i++) {
@@ -45,21 +46,20 @@ public class MutantController {
                 System.out.println();
             }
 
-            if(equalSecuences <= 2){
+            if (equalSequences >= 2) {
                 return new ResponseEntity<>(new Message("Es mutante"), HttpStatus.OK);
             } else {
                 return new ResponseEntity<>(new Message("Es humano"), HttpStatus.FORBIDDEN);
             }
 
+            //TODO guardar registros en BBDD
+            //TODO integrar unitTest
+            //TODO integrar logs
 
 
 
-        } catch (AdnSecuenceException e) {
+        } catch (AdnSequenceException e) {
             return new ResponseEntity<>(new Message(e.getMessage()), HttpStatus.BAD_REQUEST);
         }
-
-
-
     }
-
 }

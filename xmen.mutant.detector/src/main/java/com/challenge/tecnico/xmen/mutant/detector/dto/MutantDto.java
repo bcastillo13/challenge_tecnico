@@ -2,12 +2,12 @@ package com.challenge.tecnico.xmen.mutant.detector.dto;
 
 public class MutantDto {
 
-    private String adnSecuence ;
+    private String adnSequence ;
 
     public MutantDto() {
     }
 
-    public MutantDto(String adnSecuence) {
-        this.adnSecuence = adnSecuence;
+    public MutantDto(String adnSequence) {
+        this.adnSequence = adnSequence;
     }
 }

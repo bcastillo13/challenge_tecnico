@@ -10,7 +10,7 @@ public class MutantEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     int id;
 
-    private String adnSecuence ;
+    private String adnSequence ;
 
     private boolean isMutant;
 
@@ -18,8 +18,8 @@ public class MutantEntity {
         //Empty
     }
 
-    public MutantEntity(String adnSecuence, boolean isMutant) {
-        this.adnSecuence = adnSecuence;
+    public MutantEntity(String adnSequence, boolean isMutant) {
+        this.adnSequence = adnSequence;
         this.isMutant = isMutant;
     }
 
@@ -31,12 +31,12 @@ public class MutantEntity {
         this.id = id;
     }
 
-    public String getAdnSecuence() {
-        return adnSecuence;
+    public String getadnSequence() {
+        return adnSequence;
     }
 
-    public void setAdnSecuence(String adnSecuence) {
-        this.adnSecuence = adnSecuence;
+    public void setadnSequence(String adnSequence) {
+        this.adnSequence = adnSequence;
     }
 
     public boolean isMutant() {
