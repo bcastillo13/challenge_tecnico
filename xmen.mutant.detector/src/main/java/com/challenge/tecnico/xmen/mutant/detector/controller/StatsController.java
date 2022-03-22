@@ -16,7 +16,7 @@ public class StatsController {
 
     @GetMapping("")
     public StatsDto getStats(){
-        return null;
+       return mutantService.getStats();
     }
 
 }

@@ -1,8 +1,11 @@
 package com.challenge.tecnico.xmen.mutant.detector.controller;
 
 import com.challenge.tecnico.xmen.mutant.detector.dto.Message;
+import com.challenge.tecnico.xmen.mutant.detector.dto.MutantDto;
 import com.challenge.tecnico.xmen.mutant.detector.exception.AdnSequenceException;
 import com.challenge.tecnico.xmen.mutant.detector.service.MutantService;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +21,8 @@ public class MutantController {
     @Autowired
     MutantService mutantService;
 
+    private static final Logger LOGGER = LogManager.getLogger(MutantController.class);
+
     /**
      * Determina si un humano es mutante o no basado en el análisis de su secuencia de ADN
      *
@@ -25,38 +30,37 @@ public class MutantController {
      */
     @PostMapping("")
     public ResponseEntity<?> isMutant(@RequestBody String[] adn) {
-        ResponseEntity responseEntity;
+
         try {
+            boolean isMutant = false;
+            long tsIni = System.currentTimeMillis();
             int equalSequences = 0;
             String[][] matrix = mutantService.getMatrixAdn(adn);
 
-            //Búsqueda horizontak
-            equalSequences = mutantService.findSequenceHorizontal(matrix, 0, 0, ",", 1, 0);
+            //Búsqueda horizontal
+            equalSequences = mutantService.findSequenceHorizontal(matrix, 0, 0, "", 1, equalSequences);
 
             //Búsqueda vertical
-            equalSequences = mutantService.findSequenceVertical(matrix, 0, 0, ",", 1, 0) + equalSequences;
+            equalSequences = mutantService.findSequenceVertical(matrix, 0, 0, "", 1, equalSequences);
 
-            //TODO integrar busqueda de secuencias oblicuas (en desarrollo en stand alone)
+            //Búsqueda diagonal hacia atrás
+            equalSequences = mutantService.findReverseSequenceDiagonally(matrix, equalSequences);
 
-            //TODO Borrar esto, solo es un ejemplo para mostrar la matriz ingresada
-            for (int i = 0; i < matrix.length; i++) {
-                for (int j = 0; j < matrix.length; j++) {
-                    System.out.print(matrix[i][j] + " ");
-                }
-                System.out.println();
-            }
+            //Búsqueda diagonal hacia adelante
+            equalSequences = mutantService.findSequenceDiagonally(matrix, equalSequences);
 
-            if (equalSequences >= 2) {
+            if(equalSequences >= 2) isMutant = true;
+            MutantDto mutantDto = new MutantDto(adn, isMutant);
+            mutantService.saveMutant(mutantDto);
+
+            LOGGER.info("Total de secuencias encontradas = {}", equalSequences);
+            LOGGER.info("Tiempo de análisis de la cadena = {} milisegundos", (System.currentTimeMillis() - tsIni));
+
+            if (isMutant) {
                 return new ResponseEntity<>(new Message("Es mutante"), HttpStatus.OK);
             } else {
                 return new ResponseEntity<>(new Message("Es humano"), HttpStatus.FORBIDDEN);
             }
-
-            //TODO guardar registros en BBDD
-            //TODO integrar unitTest
-            //TODO integrar logs
-
-
 
         } catch (AdnSequenceException e) {
             return new ResponseEntity<>(new Message(e.getMessage()), HttpStatus.BAD_REQUEST);

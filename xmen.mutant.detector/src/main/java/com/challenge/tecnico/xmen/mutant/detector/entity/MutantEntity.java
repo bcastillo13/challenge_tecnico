@@ -1,26 +1,35 @@
 package com.challenge.tecnico.xmen.mutant.detector.entity;
 
+import com.vladmihalcea.hibernate.type.array.StringArrayType;
+import org.hibernate.annotations.Type;
+import org.hibernate.annotations.TypeDef;
+import org.hibernate.annotations.TypeDefs;
+
 import javax.persistence.*;
 
+@TypeDefs({@TypeDef(name = "string-array", typeClass = StringArrayType.class)})
 @Entity
-@Table(name = "mutant")
+@Table(name = "MUTANT_ID")
 public class MutantEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     int id;
 
-    private String adnSequence ;
+    @Type(type = "string-array")
+    @Column(name = "ADN_SEQUENCE", columnDefinition = "text[]")
+    private String[] adnSequence;
 
-    private boolean isMutant;
+    @Column(name = "MUTANT")
+    private boolean mutant;
 
     public MutantEntity() {
         //Empty
     }
 
-    public MutantEntity(String adnSequence, boolean isMutant) {
+    public MutantEntity(String[] adnSequence, boolean mutant) {
         this.adnSequence = adnSequence;
-        this.isMutant = isMutant;
+        this.mutant = mutant;
     }
 
     public int getId() {
@@ -31,19 +40,19 @@ public class MutantEntity {
         this.id = id;
     }
 
-    public String getadnSequence() {
+    public String[] getadnSequence() {
         return adnSequence;
     }
 
-    public void setadnSequence(String adnSequence) {
+    public void setadnSequence(String[] adnSequence) {
         this.adnSequence = adnSequence;
     }
 
     public boolean isMutant() {
-        return isMutant;
+        return mutant;
     }
 
     public void setMutant(boolean mutant) {
-        isMutant = mutant;
+        mutant = mutant;
     }
 }
