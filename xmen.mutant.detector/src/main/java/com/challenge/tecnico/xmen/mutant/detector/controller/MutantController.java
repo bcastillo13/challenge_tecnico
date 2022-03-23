@@ -49,7 +49,7 @@ public class MutantController {
             //Búsqueda diagonal hacia adelante
             equalSequences = mutantService.findSequenceDiagonally(matrix, equalSequences);
 
-            if(equalSequences >= 2) isMutant = true;
+            if (equalSequences >= 2) isMutant = true;
             MutantDto mutantDto = new MutantDto(adn, isMutant);
             mutantService.saveMutant(mutantDto);
 
