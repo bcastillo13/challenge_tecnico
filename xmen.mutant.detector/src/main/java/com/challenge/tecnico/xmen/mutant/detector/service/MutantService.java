@@ -22,7 +22,7 @@ public class MutantService {
     private static final Logger LOGGER = LogManager.getLogger(MutantService.class);
 
     public boolean saveMutant(MutantDto mutantDto){
-        MutantEntity entity = new MutantEntity(mutantDto.getAdnSequence(), mutantDto.isMutant());
+        MutantEntity entity = new MutantEntity(mutantDto.getDna(), mutantDto.isMutant());
         return mutantRepository.save(entity).getId() > -1;
     }
 

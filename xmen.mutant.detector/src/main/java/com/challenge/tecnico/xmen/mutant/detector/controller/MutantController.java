@@ -26,16 +26,16 @@ public class MutantController {
     /**
      * Determina si un humano es mutante o no basado en el análisis de su secuencia de ADN
      *
-     * @param adn Array de Strings que representa cada base nitrogenada del ADN.
+     * @param mutantDto Array de Strings que representa cada base nitrogenada del ADN.
      */
     @PostMapping("")
-    public ResponseEntity<?> isMutant(@RequestBody String[] adn) {
+    public ResponseEntity<?> isMutant(@RequestBody MutantDto mutantDto) {
 
         try {
             boolean isMutant = false;
             long tsIni = System.currentTimeMillis();
             int equalSequences = 0;
-            String[][] matrix = mutantService.getMatrixAdn(adn);
+            String[][] matrix = mutantService.getMatrixAdn(mutantDto.getDna());
 
             //Búsqueda horizontal
             equalSequences = mutantService.findSequenceHorizontal(matrix, 0, 0, "", 1, equalSequences);
@@ -50,7 +50,7 @@ public class MutantController {
             equalSequences = mutantService.findSequenceDiagonally(matrix, equalSequences);
 
             if (equalSequences >= 2) isMutant = true;
-            MutantDto mutantDto = new MutantDto(adn, isMutant);
+            mutantDto.setMutant(isMutant);
             mutantService.saveMutant(mutantDto);
 
             LOGGER.info("Total de secuencias encontradas = {}", equalSequences);

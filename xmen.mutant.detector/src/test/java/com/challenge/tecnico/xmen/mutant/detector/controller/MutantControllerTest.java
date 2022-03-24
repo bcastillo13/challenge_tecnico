@@ -31,12 +31,14 @@ class MutantControllerTest {
     //TODO No funciona el service
     @Test
     public void isMutant() {
-        String adn = "[\"TTTACA\", \"TATTTC\", \"TCACTT\", \"ACCAAG\", \"GCGCCA\", \"ACACTG\"]";
+        String dnaJson = "{\n" +
+                "\"dna\":[\"ATGCGA\",\"CAGTGC\",\"TTATGT\",\"AGAAGG\",\"CCCCTA\",\"TCACTG\"]\n" +
+                "}";
         given(mutantService.saveMutant(any())).willReturn(true);
         try {
             mockMvc.perform(
                             MockMvcRequestBuilders.post("/mutant")
-                                    .content(adn)
+                                    .content(dnaJson)
                                     .contentType(MediaType.APPLICATION_JSON)
                     )
                     .andExpect(MockMvcResultMatchers.status().isForbidden());

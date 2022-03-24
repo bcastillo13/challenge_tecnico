@@ -2,7 +2,7 @@ package com.challenge.tecnico.xmen.mutant.detector.dto;
 
 public class MutantDto {
 
-    private String[] adnSequence;
+    private String[] dna;
 
     private boolean mutant;
 
@@ -10,17 +10,20 @@ public class MutantDto {
         //Empty
     }
 
-    public MutantDto(String[] adnSequence, boolean mutant) {
-        this.adnSequence = adnSequence;
+    public MutantDto(String[] dna, boolean mutant) {
+        this.dna = dna;
         this.mutant = mutant;
     }
 
-    public String[] getAdnSequence() {
-        return adnSequence;
+    public String[] getDna() {
+        return dna;
     }
 
     public boolean isMutant() {
         return mutant;
     }
 
+    public void setMutant(boolean mutant) {
+        this.mutant = mutant;
+    }
 }
