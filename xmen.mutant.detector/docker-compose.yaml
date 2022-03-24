@@ -3,6 +3,8 @@ version: '2'
 services:
   app:
     image: bcastillo/xmen.mutant.detector:latest
+    build:
+      context: .
     container_name: app
     depends_on:
       - db
