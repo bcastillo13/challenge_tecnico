@@ -3,41 +3,46 @@ package com.challenge.tecnico.xmen.mutant.detector.controller;
 import com.challenge.tecnico.xmen.mutant.detector.service.MutantService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
+import org.junit.runner.RunWith;
 import org.mockito.MockitoAnnotations;
-import org.springframework.http.ResponseEntity;
-import org.springframework.mock.web.MockHttpServletRequest;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
-import static org.junit.jupiter.api.Assertions.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
+import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
+import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
+import static org.mockito.BDDMockito.given;
 
+@RunWith(SpringRunner.class)
+@WebMvcTest(controllers = MutantController.class)
 class MutantControllerTest {
 
-    @InjectMocks
-    private MutantController mutantController;
+    @Autowired
+    private MockMvc mockMvc;
 
-    @Mock
+    @MockBean
     private MutantService mutantService;
 
-    @BeforeEach
-    void setUp() {
-        MockitoAnnotations.initMocks(this);
-    }
-
-
-    //TODO Completar TEST
+    //TODO No funciona el service
     @Test
     public void isMutant() {
-        String[]  adn = new String[]{"TTTTCA", "TATTTC", "TCACTT", "TCCAAG", "TCCCCA", "CCACTG"};
-        MockHttpServletRequest request = new MockHttpServletRequest();
-        RequestContextHolder.setRequestAttributes(new ServletRequestAttributes(request));
-        when(mutantService.saveMutant(any())).thenReturn(true);
-        ResponseEntity<?> responseEntity = mutantController.isMutant(adn);
-        assertEquals(403, responseEntity.getStatusCodeValue());
+        String adn = "[\"TTTACA\", \"TATTTC\", \"TCACTT\", \"ACCAAG\", \"GCGCCA\", \"ACACTG\"]";
+        given(mutantService.saveMutant(any())).willReturn(true);
+        try {
+            mockMvc.perform(
+                            MockMvcRequestBuilders.post("/mutant")
+                                    .content(adn)
+                                    .contentType(MediaType.APPLICATION_JSON)
+                    )
+                    .andExpect(MockMvcResultMatchers.status().isForbidden());
+        } catch (Exception e) {
+            fail();
+        }
     }
 
 }

@@ -7,6 +7,7 @@ public class MutantDto {
     private boolean mutant;
 
     public MutantDto() {
+        //Empty
     }
 
     public MutantDto(String[] adnSequence, boolean mutant) {

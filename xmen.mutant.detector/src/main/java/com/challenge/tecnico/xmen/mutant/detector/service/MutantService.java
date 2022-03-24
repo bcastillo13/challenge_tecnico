@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.List;
 
 @Service
 @Transactional
@@ -65,14 +64,14 @@ public class MutantService {
     /**
      * Verifica que la secuencia de ADN ingresada tenga los tipos de base nitrogenada A,T,C,G.
      *
-     * @param nitrogeBaseType representa el tipo de base nitrogenada.
+     * @param nitrogenBaseType representa el tipo de base nitrogenada.
      * @throws AdnSequenceException en caso de tener un caracter no esperado.
      */
-    private void validateNitrogenBase(String nitrogeBaseType) throws AdnSequenceException {
-        if (!nitrogeBaseType.equalsIgnoreCase("A")
-                && !nitrogeBaseType.equalsIgnoreCase("T")
-                && !nitrogeBaseType.equalsIgnoreCase("C")
-                && !nitrogeBaseType.equalsIgnoreCase("G")) {
+    private void validateNitrogenBase(String nitrogenBaseType) throws AdnSequenceException {
+        if (!nitrogenBaseType.equalsIgnoreCase("A")
+                && !nitrogenBaseType.equalsIgnoreCase("T")
+                && !nitrogenBaseType.equalsIgnoreCase("C")
+                && !nitrogenBaseType.equalsIgnoreCase("G")) {
             throw new AdnSequenceException("Invalid sequence, allowed values A,T,C,G");
         }
     }

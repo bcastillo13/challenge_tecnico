@@ -14,6 +14,10 @@ public class StatsController {
     @Autowired
     MutantService mutantService;
 
+    /**
+     * Obtiene las el conteo de humanos y mutantes y su ratio
+     * @return Stats
+     */
     @GetMapping("")
     public StatsDto getStats(){
        return mutantService.getStats();
